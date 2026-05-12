@@ -10,7 +10,7 @@
     "test": "node tests/run.js"
   },
   "peerDependencies": {
-    "hexo": ">=5.0.0 <8"
+    "hexo": ">=5.0.0 <9"
   },
   "devDependencies": {
     "hexo": "^7.3.0"
