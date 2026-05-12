@@ -355,11 +355,19 @@ class MultiLanguageGenerator {
         const notMatchedLanguage = switchConfig['not-matched-use'] || 'en';
         const supportedLanguages = switchConfig['other-language'] || {};
 
+        // const replacements = [
+        //     [/const storage_ttl = \d+;/, `const storage_ttl = ${storageTtl};`],
+        //     [/const defaultLanguage = \[[\s\S]*?\];/, `const defaultLanguage = ${JSON.stringify(defaultLanguage)};`],
+        //     [/const notMatchedLanguage = ['"][\s\S]*?['"];/, `const notMatchedLanguage = ${JSON.stringify(notMatchedLanguage)};`],
+        //     [/const supportedLanguages = \{[\s\S]*?\};/, `const supportedLanguages = ${JSON.stringify(supportedLanguages, null, 4)};`]
+        // ];
+
         const replacements = [
-            [/const storage_ttl = \d+;/, `const storage_ttl = ${storageTtl};`],
-            [/const defaultLanguage = \[[\s\S]*?\];/, `const defaultLanguage = ${JSON.stringify(defaultLanguage)};`],
-            [/const notMatchedLanguage = ['"][\s\S]*?['"];/, `const notMatchedLanguage = ${JSON.stringify(notMatchedLanguage)};`],
-            [/const supportedLanguages = \{[\s\S]*?\};/, `const supportedLanguages = ${JSON.stringify(supportedLanguages, null, 4)};`]
+            [/const storage_ttl = \d+[;]?/, `const storage_ttl = ${storageTtl};`],
+            [/const defaultLanguage = \[[\s\S]*?\][;]?/, `const defaultLanguage = ${JSON.stringify(defaultLanguage)};`],
+            [/const notMatchedLanguage = ['"][\s\S]*?['"][;]?/, `const notMatchedLanguage = ${JSON.stringify(notMatchedLanguage)};`],
+            // 关键修改：允许大括号后面没有分号，且匹配更加贪婪一点点
+            [/const supportedLanguages = \{[\s\S]*?\}[;]?/, `const supportedLanguages = ${JSON.stringify(supportedLanguages, null, 4)};`]
         ];
 
         return replacements.reduce((result, [search, replace]) => result.replace(search, replace), content);
